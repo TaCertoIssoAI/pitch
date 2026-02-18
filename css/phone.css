@@ -1,0 +1,321 @@
+/* ===== Variables ===== */
+:root {
+  --wa-bg: #0b141a;
+  --wa-header: #111b21;
+  --wa-user-msg: #005c4b;
+  --wa-bot-msg: #202c33;
+  --wa-text: #e9edef;
+  --wa-text-muted: #8696a0;
+  --wa-quote-bg: #0b141a;
+  --wa-quote-border: #53bdeb;
+  --wa-link-bg: #111b21;
+  --wa-blue-tick: #53bdeb;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: #121212;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  perspective: 1200px;
+}
+
+/* ===== Phone Shell ===== */
+.phone-wrapper {
+  width: 380px;
+  height: 800px;
+  transform-style: preserve-3d;
+  transform: rotateX(15deg) rotateY(-20deg);
+  animation: float 5s ease-in-out infinite;
+  transition: transform 0.1s ease-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: rotateX(15deg) rotateY(-20deg) translateY(0px); }
+  50%      { transform: rotateX(15deg) rotateY(-20deg) translateY(-25px); }
+}
+
+.phone {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 50px;
+  box-shadow:
+    -10px 10px 30px rgba(0,0,0,0.8),
+    inset 0 0 10px rgba(255,255,255,0.2),
+    inset 0 0 2px 2px #333;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 8px solid #1a1a1a;
+}
+
+.notch {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 35px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 100;
+}
+
+/* ===== iOS Status Bar ===== */
+.status-bar {
+  height: 50px;
+  background: var(--wa-header);
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 25px 0 25px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  z-index: 90;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ===== WhatsApp Header ===== */
+.wa-header {
+  background: var(--wa-header);
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #222d34;
+  z-index: 90;
+}
+
+.wa-back {
+  color: #53bdeb;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 8px;
+}
+.wa-back span { font-size: 17px; margin-left: 2px; }
+
+.wa-avatar {
+  width: 40px;
+  height: 40px;
+  background: #00a884;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  margin-right: 12px;
+  overflow: hidden;
+}
+.wa-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wa-info { flex: 1; }
+.wa-name { color: var(--wa-text); font-size: 16px; font-weight: 500; }
+.wa-status { color: var(--wa-text-muted); font-size: 13px; margin-top: 2px; }
+
+.wa-actions {
+  display: flex;
+  align-items: center;
+  color: #53bdeb;
+  cursor: pointer;
+}
+
+/* ===== Chat Area ===== */
+.wa-chat {
+  flex: 1;
+  background: var(--wa-bg);
+  background-image: radial-gradient(#202c33 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 20px 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  scroll-behavior: smooth;
+}
+.wa-chat::-webkit-scrollbar { display: none; }
+
+/* ===== Messages ===== */
+.msg {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  color: var(--wa-text);
+  font-size: 15px;
+  line-height: 1.4;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: popIn 0.3s ease-out forwards;
+}
+
+@keyframes popIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg-user { background: var(--wa-user-msg); align-self: flex-end; border-top-right-radius: 4px; }
+.msg-bot  { background: var(--wa-bot-msg);  align-self: flex-start; border-top-left-radius: 4px; }
+
+.msg-text {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+.msg-text b,
+.msg-text strong { font-weight: 600; color: white; }
+.msg-text a { color: #53bdeb; text-decoration: none; }
+
+/* ===== Timestamps & Read Receipts ===== */
+.msg-time {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  float: right;
+  margin: 10px 0 -5px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.msg-user .msg-time { color: #84d2c5; }
+
+/* ===== Quotes ===== */
+.quote {
+  background: var(--wa-quote-bg);
+  border-left: 4px solid var(--wa-quote-border);
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.quote-name { color: var(--wa-quote-border); font-weight: 600; margin-bottom: 4px; }
+.quote-text { color: var(--wa-text-muted); }
+
+/* ===== Link Previews ===== */
+.link-preview {
+  background: var(--wa-link-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  border: 1px solid #2a3942;
+}
+
+.lp-image-mock {
+  height: 140px;
+  background: linear-gradient(135deg, #0f2027, #203a43, #153229);
+  position: relative;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lp-logo {
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.lp-logo span {
+  background: #00a884;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.lp-title-mock { color: white; font-size: 14px; font-weight: bold; width: 60%; }
+.lp-title-mock span { color: #00a884; }
+
+.lp-graph {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: conic-gradient(#00a884 0% 60%, #ff3b30 60% 80%, #8e8e93 80% 100%);
+}
+
+.lp-content { padding: 10px; }
+.lp-title  { font-weight: bold; font-size: 14px; margin-bottom: 4px; color: var(--wa-text); }
+.lp-desc   {
+  font-size: 13px;
+  color: var(--wa-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.lp-url { font-size: 12px; color: var(--wa-text-muted); text-transform: lowercase; }
+
+/* ===== Typing Indicator ===== */
+.typing { display: none; padding: 12px 16px; }
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background: var(--wa-text-muted);
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 1.4s infinite ease-in-out both;
+  margin-right: 3px;
+}
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* ===== Input Bar ===== */
+.wa-input-area {
+  background: var(--wa-header);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 30px;
+}
+
+.icon-action {
+  color: var(--wa-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-pill {
+  flex: 1;
+  background: #202c33;
+  border-radius: 20px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 40px;
+}
