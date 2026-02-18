@@ -1,0 +1,149 @@
+/* ===================================================
+ *  Transition animations for SceneManager
+ *  Each transition defines -enter, -exit, and -active
+ *  variants via CSS animations.
+ * =================================================== */
+
+/* ---- Shared ---- */
+.scene-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.scene-active {
+  z-index: 1;
+}
+
+/* ============================
+ *  FADE
+ * ============================ */
+.t-fade-enter {
+  opacity: 0;
+  z-index: 2;
+}
+.t-fade-enter-active {
+  animation: fadeIn 600ms ease forwards;
+  z-index: 2;
+}
+.t-fade-exit-active {
+  animation: fadeOut 600ms ease forwards;
+  z-index: 1;
+}
+
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* ============================
+ *  SLIDE LEFT
+ * ============================ */
+.t-slide-left-enter {
+  transform: translateX(100%);
+  z-index: 2;
+}
+.t-slide-left-enter-active {
+  animation: slideInLeft 700ms cubic-bezier(.4,0,.2,1) forwards;
+  z-index: 2;
+}
+.t-slide-left-exit-active {
+  animation: slideOutLeft 700ms cubic-bezier(.4,0,.2,1) forwards;
+  z-index: 1;
+}
+
+/* Reverse (prev) */
+.t-slide-left-enter.reverse {
+  transform: translateX(-100%);
+}
+.t-slide-left-enter-active.reverse {
+  animation: slideInRight 700ms cubic-bezier(.4,0,.2,1) forwards;
+}
+.t-slide-left-exit-active.reverse {
+  animation: slideOutRight 700ms cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes slideInLeft   { from { transform: translateX(100%); }  to { transform: translateX(0); } }
+@keyframes slideOutLeft  { from { transform: translateX(0); }     to { transform: translateX(-100%); } }
+@keyframes slideInRight  { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes slideOutRight { from { transform: translateX(0); }     to { transform: translateX(100%); } }
+
+/* ============================
+ *  SLIDE UP
+ * ============================ */
+.t-slide-up-enter {
+  transform: translateY(100%);
+  z-index: 2;
+}
+.t-slide-up-enter-active {
+  animation: slideInUp 700ms cubic-bezier(.4,0,.2,1) forwards;
+  z-index: 2;
+}
+.t-slide-up-exit-active {
+  animation: slideOutUp 700ms cubic-bezier(.4,0,.2,1) forwards;
+  z-index: 1;
+}
+
+.t-slide-up-enter.reverse {
+  transform: translateY(-100%);
+}
+.t-slide-up-enter-active.reverse {
+  animation: slideInDown 700ms cubic-bezier(.4,0,.2,1) forwards;
+}
+.t-slide-up-exit-active.reverse {
+  animation: slideOutDown 700ms cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes slideInUp    { from { transform: translateY(100%); }  to { transform: translateY(0); } }
+@keyframes slideOutUp   { from { transform: translateY(0); }    to { transform: translateY(-100%); } }
+@keyframes slideInDown  { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+@keyframes slideOutDown { from { transform: translateY(0); }     to { transform: translateY(100%); } }
+
+/* ============================
+ *  ZOOM
+ * ============================ */
+.t-zoom-enter {
+  opacity: 0;
+  transform: scale(0.3);
+  z-index: 2;
+}
+.t-zoom-enter-active {
+  animation: zoomIn 600ms cubic-bezier(.4,0,.2,1) forwards;
+  z-index: 2;
+}
+.t-zoom-exit-active {
+  animation: zoomOut 600ms cubic-bezier(.4,0,.2,1) forwards;
+  z-index: 1;
+}
+
+.t-zoom-enter.reverse {
+  transform: scale(2);
+}
+.t-zoom-enter-active.reverse {
+  animation: zoomInReverse 600ms cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes zoomIn        { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
+@keyframes zoomOut       { from { opacity: 1; transform: scale(1); }   to { opacity: 0; transform: scale(2); } }
+@keyframes zoomInReverse { from { opacity: 0; transform: scale(2); }   to { opacity: 1; transform: scale(1); } }
+
+/* ============================
+ *  FLIP
+ * ============================ */
+.t-flip-enter {
+  opacity: 0;
+  transform: rotateY(90deg);
+  z-index: 2;
+}
+.t-flip-enter-active {
+  animation: flipIn 800ms ease forwards;
+  z-index: 2;
+}
+.t-flip-exit-active {
+  animation: flipOut 800ms ease forwards;
+  z-index: 1;
+}
+
+@keyframes flipIn  { from { opacity: 0; transform: rotateY(90deg); }  to { opacity: 1; transform: rotateY(0); } }
+@keyframes flipOut { from { opacity: 1; transform: rotateY(0); }      to { opacity: 0; transform: rotateY(-90deg); } }
