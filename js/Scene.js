@@ -75,6 +75,23 @@ class Scene {
     this._timers = [];
   }
 
+  /* ---- Skip-to-end support ---- */
+
+  /**
+   * Override in subclasses to return true while animations are still
+   * running. When the user tries to advance, SceneManager will call
+   * skipToEnd() first so the scene finishes cleanly.
+   */
+  canSkipToEnd() {
+    return false;
+  }
+
+  /**
+   * Override in subclasses to instantly jump to the scene's final
+   * visual state (cancel timers, set CSS classes, etc.).
+   */
+  skipToEnd() {}
+
   /* ---- Convenience ---- */
 
   /** Access the SceneManager (e.g., to call this.manager.next()) */

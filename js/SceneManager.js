@@ -87,6 +87,13 @@ class SceneManager {
     if (this.isTransitioning) return;
     if (this.currentIndex >= this.order.length - 1) return;
 
+    // If the current scene has pending animations, skip to end first
+    const currentScene = this._current();
+    if (currentScene && currentScene.canSkipToEnd()) {
+      currentScene.skipToEnd();
+      return; // user must press again to actually advance
+    }
+
     const fromId = this.order[this.currentIndex];
     const toId = this.order[this.currentIndex + 1];
     const transition = this._resolveTransition(fromId, toId);

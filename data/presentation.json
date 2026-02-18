@@ -19,6 +19,26 @@
       "config": {
         "dataFile": "data/messages.json"
       }
+    },
+    {
+      "id": "analysis-step1",
+      "type": "analysis",
+      "transition": "fade",
+      "config": {
+        "dataFile": "data/messages.json",
+        "highlightMsg": 1,
+        "callout": {
+          "badge": "Etapa 1 — Recepção",
+          "title": "Analisando a mensagem",
+          "text": "Quando o usuário envia uma mensagem, nosso bot inicia o <strong>pipeline de verificação</strong> no backend. A mensagem é processada em tempo real.",
+          "steps": [
+            "A mensagem chega via API do WhatsApp",
+            "O texto é extraído e normalizado (remoção de emojis, formatação)",
+            "O pipeline de IA é acionado para buscar fontes confiáveis",
+            "As fontes são cruzadas e um veredito é gerado automaticamente"
+          ]
+        }
+      }
     }
   ]
 }

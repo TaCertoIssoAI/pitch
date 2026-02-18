@@ -7,11 +7,13 @@
 import SceneManager from './SceneManager.js';
 import TitleScene from './scenes/TitleScene.js';
 import WhatsAppScene from './scenes/WhatsAppScene.js';
+import AnalysisScene from './scenes/AnalysisScene.js';
 
 /* ---- Scene type registry ---- */
 const SCENE_TYPES = {
   title: TitleScene,
   whatsapp: WhatsAppScene,
+  analysis: AnalysisScene,
 };
 
 async function init() {
