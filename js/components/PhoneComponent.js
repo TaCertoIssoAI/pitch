@@ -120,15 +120,9 @@ class PhoneComponent {
     this.typingIndicator = this.container.querySelector('#typing-indicator');
   }
 
-  /* ---- 3D parallax on mouse move ---- */
+  /* ---- 3D parallax on mouse move (disabled) ---- */
   initParallax() {
-    document.addEventListener('mousemove', (e) => {
-      const phone = this.container.querySelector('#phone3d');
-      if (!phone) return;
-      const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-      const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-      phone.style.transform = `rotateY(${-20 + xAxis}deg) rotateX(${15 - yAxis}deg)`;
-    });
+    // Parallax disabled — phone stays static
   }
 
   /* ---- Public helpers used by ChatEngine ---- */

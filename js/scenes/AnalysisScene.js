@@ -45,6 +45,18 @@ class AnalysisScene extends Scene {
     // Render all messages instantly
     this._renderMessagesInstantly();
 
+    // Continuously pin chat to bottom until enter() starts the scroll-up.
+    // This survives any browser layout recalculations during the fade transition.
+    const chatBox = this.phone.getChatBox();
+    this._keepAtBottom = true;
+    const pinToBottom = () => {
+      if (this._keepAtBottom) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+        requestAnimationFrame(pinToBottom);
+      }
+    };
+    requestAnimationFrame(pinToBottom);
+
     // Start in diagonal position (matching WhatsApp scene end state)
     const pw = phoneWrapper.querySelector('.phone-wrapper');
     pw.classList.add('state-diagonal');
@@ -65,17 +77,31 @@ class AnalysisScene extends Scene {
 
   enter() {
     const pw = this._container.querySelector('.phone-wrapper');
+    const chatBox = this.phone.getChatBox();
+
+    // Step 0: Smooth scroll-up from bottom to highlighted message
+    const scrollUpDelay = 600;   // ms before scroll starts
+    const scrollUpDuration = 2000; // ms for the scroll animation
+
+    this.setTimeout(() => {
+      // Stop pinning to bottom — NOW we begin the scroll-up
+      this._keepAtBottom = false;
+      chatBox.scrollTop = chatBox.scrollHeight; // ensure we start from the very bottom
+      this._smoothScrollToMessage(chatBox, this.config.highlightMsg ?? 1, scrollUpDuration);
+    }, scrollUpDelay);
+
+    const afterScrollDelay = scrollUpDelay + scrollUpDuration;
 
     // Step 1: Rotate phone to front + shift left
     this.setTimeout(() => {
       pw.classList.remove('state-diagonal');
       pw.classList.add('state-front');
-    }, 400);
+    }, afterScrollDelay + 400);
 
     // Step 2: Highlight message
     this.setTimeout(() => {
       this._highlightMessage();
-    }, 1600);
+    }, afterScrollDelay + 1600);
 
     // Step 3: Show callout + draw connector
     this.setTimeout(() => {
@@ -85,7 +111,7 @@ class AnalysisScene extends Scene {
       if (svg) svg.style.display = '';
       this._drawConnector();
       this._animationComplete = true;
-    }, 2000);
+    }, afterScrollDelay + 2000);
   }
 
   /* ================================================================
@@ -98,6 +124,7 @@ class AnalysisScene extends Scene {
   skipToEnd() {
     // Cancel all pending timers
     this.clearTimers();
+    this._keepAtBottom = false;
 
     if (!this._container) return;
 
@@ -110,6 +137,14 @@ class AnalysisScene extends Scene {
       pw.classList.add('state-front');
       // Re-enable transitions after a frame
       requestAnimationFrame(() => { pw.style.transition = ''; });
+    }
+
+    // Scroll to highlighted message instantly
+    const chatBox = this.phone.getChatBox();
+    const idx = this.config.highlightMsg ?? 1;
+    const targetMsg = chatBox.querySelector(`[data-msg-index="${idx}"]`);
+    if (targetMsg) {
+      targetMsg.scrollIntoView({ block: 'center' });
     }
 
     // Highlight message
@@ -130,8 +165,39 @@ class AnalysisScene extends Scene {
   }
 
   unmount() {
+    this._keepAtBottom = false;
     this.phone = null;
     super.unmount();
+  }
+
+  /* ================================================================
+   *  Smooth scroll to a specific message (eased animation)
+   * ================================================================ */
+  _smoothScrollToMessage(chatBox, msgIndex, duration) {
+    const targetMsg = chatBox.querySelector(`[data-msg-index="${msgIndex}"]`);
+    if (!targetMsg) return;
+
+    // Calculate the scroll target so the message is roughly centered
+    const targetTop = targetMsg.offsetTop - chatBox.clientHeight / 2 + targetMsg.offsetHeight / 2;
+    const scrollTarget = Math.max(0, targetTop);
+    const startScroll = chatBox.scrollTop;
+    const distance = scrollTarget - startScroll;
+    const startTime = performance.now();
+
+    const easeInOutCubic = (t) => t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    const step = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      chatBox.scrollTop = startScroll + distance * easeInOutCubic(progress);
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    };
+
+    requestAnimationFrame(step);
   }
 
   /* ================================================================
