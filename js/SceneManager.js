@@ -202,6 +202,9 @@ class SceneManager {
       // Keep old scene on top, fully opaque
       outgoing.style.zIndex = '2';
 
+      // Tell the new scene how long it must stay frozen
+      toScene._apparitionDelay = apparitionDelay + 600; // delay + fade
+
       // Start the new scene's enter() right away
       toScene.enter();
 

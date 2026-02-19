@@ -57,11 +57,14 @@ class WhatsAppScene extends Scene {
     const phoneWrapper = this._container.querySelector('.phone-wrapper');
     if (!chatBox || !phoneWrapper) return null;
 
-    // Freeze the phone at its current position (stop float animation)
-    // so the cross-fade shows two identical, static phones.
-    const computedTransform = getComputedStyle(phoneWrapper).transform;
+    // Stop the float animation and smoothly settle to the known rest
+    // position.  The CSS transition will animate the snap over 400ms,
+    // and during the apparitionDelay the old scene stays visible so
+    // the user sees the phone gently come to rest.
+    const restTransform = 'rotateX(15deg) rotateY(-20deg)';
     phoneWrapper.style.animation = 'none';
-    phoneWrapper.style.transform = computedTransform;
+    phoneWrapper.style.transition = 'transform 0.4s ease-out';
+    phoneWrapper.style.transform = restTransform;
 
     // Collect rendered messages HTML (excluding typing indicator)
     const msgs = chatBox.querySelectorAll('.msg:not(.typing)');
@@ -71,7 +74,7 @@ class WhatsAppScene extends Scene {
       chatMessagesHTML: messagesHTML,
       scrollTop: chatBox.scrollTop,
       scrollHeight: chatBox.scrollHeight,
-      phoneTransform: computedTransform,
+      phoneTransform: restTransform,
     };
   }
 

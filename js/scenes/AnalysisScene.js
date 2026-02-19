@@ -62,6 +62,8 @@ class AnalysisScene extends Scene {
       // Match the exact phone transform captured from previous scene
       if (previousState.phoneTransform) {
         pw.style.transform = previousState.phoneTransform;
+        // Disable CSS transition while frozen — re-enabled in enter()
+        pw.style.transition = 'none';
       }
       pw.classList.add('state-diagonal');
     } else {
@@ -98,16 +100,29 @@ class AnalysisScene extends Scene {
     const pw = this._container.querySelector('.phone-wrapper');
     const chatBox = this.phone.getChatBox();
 
-    // If we restored from a previous scene, release the inline transform
-    // so the CSS class (state-diagonal) takes over. The CSS transition
-    // property on .analysis-phone-wrapper .phone-wrapper ensures a smooth
-    // interpolation if there's any tiny difference.
+    // If apparitionDelay is active, the old scene stays visible on top
+    // for that duration. All our animations must wait so the phone
+    // stays pixel-perfect at the captured position until the old scene
+    // has fully faded out.
+    const apparition = this._apparitionDelay || 0;
+
+    // Release the captured inline transform AFTER the old scene is gone
+    // so the CSS class (state-diagonal) smoothly takes over.
     if (this._previousSceneState && this._previousSceneState.phoneTransform) {
-      pw.style.transform = '';
+      if (apparition > 0) {
+        this.setTimeout(() => {
+          // Re-enable CSS transition, then release inline transform
+          pw.style.transition = '';
+          pw.style.transform = '';
+        }, apparition);
+      } else {
+        pw.style.transition = '';
+        pw.style.transform = '';
+      }
     }
 
     // Step 0: Smooth scroll-up from bottom to highlighted message
-    const scrollUpDelay = 600;   // ms before scroll starts
+    const scrollUpDelay = apparition + 600;   // ms before scroll starts
     const scrollUpDuration = 2000; // ms for the scroll animation
 
     this.setTimeout(() => {
