@@ -24,6 +24,7 @@
       "id": "analysis-step1",
       "type": "analysis",
       "transition": "fade",
+      "apparitionDelay": 2000,
       "config": {
         "dataFile": "data/messages.json",
         "highlightMsg": 1,

@@ -31,23 +31,46 @@ class AnalysisScene extends Scene {
   async mount(container) {
     await super.mount(container);
 
+    const previousState = this._previousSceneState;
+
     // ---- Phone wrapper ----
     const phoneWrapper = document.createElement('div');
     phoneWrapper.className = 'analysis-phone-wrapper';
     phoneWrapper.id = 'analysis-phone-wrapper';
     container.appendChild(phoneWrapper);
 
-    // Build phone with all messages pre-rendered
+    // Build phone shell (empty chat)
     this.phone = new PhoneComponent('#analysis-phone-wrapper', {
       contact: this.config.contact || {},
     });
 
-    // Render all messages instantly
-    this._renderMessagesInstantly();
-
-    // Continuously pin chat to bottom until enter() starts the scroll-up.
-    // This survives any browser layout recalculations during the fade transition.
     const chatBox = this.phone.getChatBox();
+    const typingIndicator = this.phone.getTypingIndicator();
+    const pw = phoneWrapper.querySelector('.phone-wrapper');
+
+    if (previousState && previousState.chatMessagesHTML) {
+      // ---- Seamless restore from previous scene ----
+      // Inject the exact chat HTML captured from the outgoing scene
+      chatBox.classList.add('chat-restored');
+      typingIndicator.insertAdjacentHTML('beforebegin', previousState.chatMessagesHTML);
+      typingIndicator.style.display = 'none';
+
+      // Add data-msg-index attributes so highlight / scroll works later
+      const msgs = chatBox.querySelectorAll('.msg:not(.typing)');
+      msgs.forEach((m, i) => m.setAttribute('data-msg-index', i));
+
+      // Match the exact phone transform captured from previous scene
+      if (previousState.phoneTransform) {
+        pw.style.transform = previousState.phoneTransform;
+      }
+      pw.classList.add('state-diagonal');
+    } else {
+      // ---- Fallback: render everything from config ----
+      this._renderMessagesInstantly();
+      pw.classList.add('state-diagonal');
+    }
+
+    // Pin chat to bottom during the transition. Released in enter().
     this._keepAtBottom = true;
     const pinToBottom = () => {
       if (this._keepAtBottom) {
@@ -57,13 +80,9 @@ class AnalysisScene extends Scene {
     };
     requestAnimationFrame(pinToBottom);
 
-    // Start in diagonal position (matching WhatsApp scene end state)
-    const pw = phoneWrapper.querySelector('.phone-wrapper');
-    pw.classList.add('state-diagonal');
-
     // ---- Callout card (initially hidden) ----
     const callout = this._buildCallout();
-    callout.style.display = 'none';   // hidden until phone finishes rotating
+    callout.style.display = 'none';
     container.appendChild(callout);
 
     // ---- SVG connector (initially hidden) ----
@@ -78,6 +97,14 @@ class AnalysisScene extends Scene {
   enter() {
     const pw = this._container.querySelector('.phone-wrapper');
     const chatBox = this.phone.getChatBox();
+
+    // If we restored from a previous scene, release the inline transform
+    // so the CSS class (state-diagonal) takes over. The CSS transition
+    // property on .analysis-phone-wrapper .phone-wrapper ensures a smooth
+    // interpolation if there's any tiny difference.
+    if (this._previousSceneState && this._previousSceneState.phoneTransform) {
+      pw.style.transform = '';
+    }
 
     // Step 0: Smooth scroll-up from bottom to highlighted message
     const scrollUpDelay = 600;   // ms before scroll starts

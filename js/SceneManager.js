@@ -60,14 +60,25 @@ class SceneManager {
   loadPresentation(config) {
     this.defaultTransition = config.defaultTransition || 'fade';
     this.order = config.scenes.map((s) => s.id);
+    this.apparitionDelays = new Map(); // "from→to" → ms
 
-    // Build transition map
+    // Build transition map + apparitionDelay map
     for (let i = 0; i < config.scenes.length; i++) {
       const s = config.scenes[i];
-      if (s.transition) {
-        // The transition *into* this scene
-        const prevId = i > 0 ? config.scenes[i - 1].id : null;
-        if (prevId) this.transitions.set(`${prevId}→${s.id}`, s.transition);
+      const prevId = i > 0 ? config.scenes[i - 1].id : null;
+
+      if (s.transition && prevId) {
+        this.transitions.set(`${prevId}→${s.id}`, s.transition);
+      }
+
+      // apparitionDelay: keep outgoing scene visible for N ms while
+      // the incoming scene's animations already play underneath.
+      // Use true for the default (2000 ms) or a number for custom ms.
+      if (s.apparitionDelay != null && prevId) {
+        const delay = typeof s.apparitionDelay === 'number'
+          ? s.apparitionDelay
+          : 2000; // default 2 s
+        this.apparitionDelays.set(`${prevId}→${s.id}`, delay);
       }
     }
   }
@@ -139,6 +150,10 @@ class SceneManager {
     return this.transitions.get(`${fromId}→${toId}`) || this.defaultTransition || 'fade';
   }
 
+  _resolveApparitionDelay(fromId, toId) {
+    return this.apparitionDelays.get(`${fromId}→${toId}`) || 0;
+  }
+
   /**
    * Mount a scene into the stage (no transition).
    */
@@ -160,47 +175,90 @@ class SceneManager {
     const fromScene = this.scenes.get(fromId);
     const toScene = this.scenes.get(toId);
 
-    // Create incoming container
-    const incoming = document.createElement('div');
-    incoming.className = 'scene-container';
-    incoming.id = `scene-${toId}`;
-    this.stage.appendChild(incoming);
-    await toScene.mount(incoming);
+    // Capture state from outgoing scene so the incoming scene can
+    // start exactly where the previous one left off.
+    const previousState = fromScene.captureState ? fromScene.captureState() : null;
+    toScene._previousSceneState = previousState;
 
-    const outgoing = document.getElementById(`scene-${fromId}`);
+    const apparitionDelay = this._resolveApparitionDelay(fromId, toId);
 
-    // Apply transition classes
-    const transClass = `t-${transition}`;
-    const enterClasses = [transClass, `${transClass}-enter`];
-    const exitClasses = [transClass, `${transClass}-exit`];
-    if (direction === 'backward') {
-      enterClasses.push('reverse');
-      exitClasses.push('reverse');
+    if (apparitionDelay > 0) {
+      // ── Apparition-delay mode ──────────────────────────────────
+      // Mount the new scene underneath and start its animations
+      // immediately, while the old scene stays fully visible on top.
+      // After `apparitionDelay` ms the old scene fades out to reveal
+      // the new scene already in motion.
+
+      const outgoing = document.getElementById(`scene-${fromId}`);
+
+      // New scene goes behind the old one
+      const incoming = document.createElement('div');
+      incoming.className = 'scene-container scene-active';
+      incoming.id = `scene-${toId}`;
+      incoming.style.zIndex = '0';
+      this.stage.appendChild(incoming);
+      await toScene.mount(incoming);
+
+      // Keep old scene on top, fully opaque
+      outgoing.style.zIndex = '2';
+
+      // Start the new scene's enter() right away
+      toScene.enter();
+
+      // Hold the old scene visible for the configured delay
+      await this._wait(apparitionDelay);
+
+      // Fade the old scene out (600 ms crossfade)
+      const fadeMs = 600;
+      outgoing.style.transition = `opacity ${fadeMs}ms ease`;
+      outgoing.style.opacity = '0';
+      await this._wait(fadeMs);
+
+      // Tear down old scene
+      fromScene.exit();
+      fromScene.unmount();
+      outgoing.remove();
+
+      // Clean up inline styles on the new container
+      incoming.style.zIndex = '';
+
+    } else {
+      // ── Normal CSS-class transition ────────────────────────────
+      const incoming = document.createElement('div');
+      incoming.className = 'scene-container';
+      incoming.id = `scene-${toId}`;
+      this.stage.appendChild(incoming);
+      await toScene.mount(incoming);
+
+      const outgoing = document.getElementById(`scene-${fromId}`);
+
+      const transClass = `t-${transition}`;
+      const enterClasses = [transClass, `${transClass}-enter`];
+      const exitClasses = [transClass, `${transClass}-exit`];
+      if (direction === 'backward') {
+        enterClasses.push('reverse');
+        exitClasses.push('reverse');
+      }
+
+      incoming.classList.add(...enterClasses);
+      outgoing.classList.add(...exitClasses);
+
+      // Force reflow
+      incoming.offsetHeight;
+
+      incoming.classList.add(`${transClass}-enter-active`);
+      outgoing.classList.add(`${transClass}-exit-active`);
+
+      const duration = this._getTransitionDuration(transition);
+      await this._wait(duration);
+
+      fromScene.exit();
+      fromScene.unmount();
+      outgoing.remove();
+
+      incoming.className = 'scene-container scene-active';
+      toScene.enter();
     }
-
-    // Position incoming off-screen
-    incoming.classList.add(...enterClasses);
-    outgoing.classList.add(...exitClasses);
-
-    // Force reflow
-    incoming.offsetHeight;
-
-    // Trigger
-    incoming.classList.add(`${transClass}-enter-active`);
-    outgoing.classList.add(`${transClass}-exit-active`);
-
-    // Wait for animation to finish
-    const duration = this._getTransitionDuration(transition);
-    await this._wait(duration);
-
-    // Clean up old scene
-    fromScene.exit();
-    fromScene.unmount();
-    outgoing.remove();
-
-    // Finalize new scene
-    incoming.className = 'scene-container scene-active';
-    toScene.enter();
 
     this.isTransitioning = false;
 

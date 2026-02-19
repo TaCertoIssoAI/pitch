@@ -254,6 +254,13 @@
 }
 .lp-url { font-size: 12px; color: var(--wa-text-muted); text-transform: lowercase; }
 
+/* ===== Restored chat — disable entry animations ===== */
+.chat-restored .msg {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
 /* ===== Typing Indicator ===== */
 .typing { display: none; padding: 12px 16px; }
 

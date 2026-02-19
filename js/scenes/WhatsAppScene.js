@@ -46,6 +46,35 @@ class WhatsAppScene extends Scene {
     }
   }
 
+  /**
+   * Capture the current visual state so the next scene can start
+   * with an identical phone + chat appearance.
+   */
+  captureState() {
+    if (!this.phone || !this._container) return null;
+
+    const chatBox = this.phone.getChatBox();
+    const phoneWrapper = this._container.querySelector('.phone-wrapper');
+    if (!chatBox || !phoneWrapper) return null;
+
+    // Freeze the phone at its current position (stop float animation)
+    // so the cross-fade shows two identical, static phones.
+    const computedTransform = getComputedStyle(phoneWrapper).transform;
+    phoneWrapper.style.animation = 'none';
+    phoneWrapper.style.transform = computedTransform;
+
+    // Collect rendered messages HTML (excluding typing indicator)
+    const msgs = chatBox.querySelectorAll('.msg:not(.typing)');
+    const messagesHTML = Array.from(msgs).map(m => m.outerHTML).join('\n');
+
+    return {
+      chatMessagesHTML: messagesHTML,
+      scrollTop: chatBox.scrollTop,
+      scrollHeight: chatBox.scrollHeight,
+      phoneTransform: computedTransform,
+    };
+  }
+
   exit() {
     // ChatEngine uses async awaits; we clear any pending Scene timers
     super.exit();

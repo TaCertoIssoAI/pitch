@@ -75,6 +75,18 @@ class Scene {
     this._timers = [];
   }
 
+  /* ---- State capture for seamless scene continuity ---- */
+
+  /**
+   * Override in subclasses to capture the scene's current visual state
+   * so the next scene can start exactly where this one left off.
+   * Called by SceneManager right before transitioning away.
+   * @returns {object|null}  State snapshot, or null if not supported.
+   */
+  captureState() {
+    return null;
+  }
+
   /* ---- Skip-to-end support ---- */
 
   /**
