@@ -32,6 +32,7 @@ window.Slide3Config = {
     const defaultContent = phone.querySelector('.phone-content-default');
     const chatContent    = phone.querySelector('.phone-content-chat');
     const userBubble     = phone.querySelector('.chat-bubble--user');
+    const typingBubble   = phone.querySelector('.chat-bubble--typing');
     const botBubble      = phone.querySelector('.chat-bubble--bot');
 
     // ── 0.0s — z-index swap ──────────────────────────────
@@ -90,15 +91,20 @@ window.Slide3Config = {
       0.35
     );
 
-    // ── 0.6s — Reset chat bubbles for re-animation ──────
+    // ── 0.6s — Reset all chat bubbles for re-animation ──
     tl.fromTo(userBubble,
       { opacity: 1, y: 0 },
-      { opacity: 0, y: 15, duration: 0.01 },
+      { opacity: 0, y: 12, duration: 0.01 },
+      0.6
+    );
+    tl.fromTo(typingBubble,
+      { opacity: 0, scale: 0.6 },
+      { opacity: 0, scale: 0, duration: 0.01 },
       0.6
     );
     tl.fromTo(botBubble,
-      { opacity: 1, y: 0 },
-      { opacity: 0, y: 15, duration: 0.01 },
+      { opacity: 1, scale: 1 },
+      { opacity: 0, scale: 0, duration: 0.01 },
       0.6
     );
 

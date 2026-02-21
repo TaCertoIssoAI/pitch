@@ -2,8 +2,8 @@
  * slide-1.js — "Como funciona" / Chat interativo
  *
  * Phone moves right-center. Default phone content cross-fades to WhatsApp chat.
- * Chat bubbles animate in sequentially.
- * This buildTransition animates FROM slide-0 TO slide-1.
+ * Sequence: user bubble → typing dots → (delay) → dots fade out → real bot message scales in.
+ * All with fromTo() for perfect reversibility.
  */
 window.Slide1Config = {
   id: 'slide-1',
@@ -30,6 +30,7 @@ window.Slide1Config = {
     const defaultContent = phone.querySelector('.phone-content-default');
     const chatContent    = phone.querySelector('.phone-content-chat');
     const userBubble     = phone.querySelector('.chat-bubble--user');
+    const typingBubble   = phone.querySelector('.chat-bubble--typing');
     const botBubble      = phone.querySelector('.chat-bubble--bot');
 
     // ── 0.0s — z-index swap ──────────────────────────────
@@ -76,18 +77,33 @@ window.Slide1Config = {
       0.35
     );
 
-    // ── 1.0s — User bubble slides in (0.4s) ─────────────
+    // ── 1.0s — User bubble slides in (0.35s) ────────────
     tl.fromTo(userBubble,
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' },
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, duration: 0.35, ease: 'power3.out' },
       1.0
     );
 
-    // ── 1.6s — Bot bubble slides in (0.4s) ──────────────
+    // ── 1.5s — Typing indicator bubble appears (0.25s) ──
+    tl.fromTo(typingBubble,
+      { opacity: 0, scale: 0, transformOrigin: '0% 0%' },
+      { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.4)' },
+      1.5
+    );
+
+    // ── 3.2s — Typing indicator fades out (0.2s) ────────
+    // (after ~1.7s of visible typing dots animation)
+    tl.fromTo(typingBubble,
+      { opacity: 1, scale: 1 },
+      { opacity: 0, scale: 0.6, duration: 0.2, ease: 'power2.in' },
+      3.2
+    );
+
+    // ── 3.35s — Real bot message scales in (0.3s) ───────
     tl.fromTo(botBubble,
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' },
-      1.6
+      { opacity: 0, scale: 0, transformOrigin: '0% 0%' },
+      { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.2)' },
+      3.35
     );
 
     // ── end — Normalize z-index ──────────────────────────
