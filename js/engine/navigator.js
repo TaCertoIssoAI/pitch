@@ -1,7 +1,7 @@
 /**
  * navigator.js
  * State machine: tracks currentIndex, isAnimating, and handles all input events.
- * Exposes goNext() and goPrev() globally.
+ * Supports fast-forward: clicking during a forward animation skips to end.
  */
 window.Navigator = {
   currentIndex: 0,
@@ -10,28 +10,44 @@ window.Navigator = {
   totalSlides: 0,
   lastWheelTime: 0,
   WHEEL_COOLDOWN: 900, // ms
+  _activeTimeline: null,
+  _activeDirection: null,
 
   init(transitions, totalSlides) {
     this.transitions  = transitions;
     this.totalSlides  = totalSlides;
     this.currentIndex = 0;
     this.isAnimating  = false;
+    this._activeTimeline  = null;
+    this._activeDirection = null;
 
     this._bindEvents();
     this._updateUI();
   },
 
   goNext() {
-    if (this.isAnimating || this.currentIndex >= this.totalSlides - 1) return;
+    // Fast-forward: if already animating forward, skip to end
+    if (this.isAnimating) {
+      if (this._activeTimeline && this._activeDirection === 'forward') {
+        this._activeTimeline.progress(1);
+      }
+      return;
+    }
+
+    if (this.currentIndex >= this.totalSlides - 1) return;
 
     this.isAnimating = true;
     this._updateButtons();
 
     const tl = this.transitions[this.currentIndex];
+    this._activeTimeline  = tl;
+    this._activeDirection = 'forward';
 
     tl.eventCallback('onComplete', () => {
       this.currentIndex++;
       this.isAnimating = false;
+      this._activeTimeline  = null;
+      this._activeDirection = null;
       this._updateUI();
     });
 
@@ -45,10 +61,14 @@ window.Navigator = {
     this._updateButtons();
 
     const tl = this.transitions[this.currentIndex - 1];
+    this._activeTimeline  = tl;
+    this._activeDirection = 'reverse';
 
     tl.eventCallback('onReverseComplete', () => {
       this.currentIndex--;
       this.isAnimating = false;
+      this._activeTimeline  = null;
+      this._activeDirection = null;
       this._updateUI();
     });
 
@@ -66,12 +86,16 @@ window.Navigator = {
     const playSequence = () => {
       if (this.currentIndex === index) {
         this.isAnimating = false;
+        this._activeTimeline  = null;
+        this._activeDirection = null;
         this._updateUI();
         return;
       }
 
       if (step > 0) {
         const tl = this.transitions[this.currentIndex];
+        this._activeTimeline  = tl;
+        this._activeDirection = 'forward';
         tl.eventCallback('onComplete', () => {
           this.currentIndex++;
           playSequence();
@@ -79,6 +103,8 @@ window.Navigator = {
         tl.play();
       } else {
         const tl = this.transitions[this.currentIndex - 1];
+        this._activeTimeline  = tl;
+        this._activeDirection = 'reverse';
         tl.eventCallback('onReverseComplete', () => {
           this.currentIndex--;
           playSequence();

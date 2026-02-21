@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/slides.css">
+  <link rel="stylesheet" href="css/chat.css">
 </head>
 <body>
 
@@ -38,52 +39,17 @@
       </div>
     </div>
 
-    <!-- Slide 1: Problem -->
+    <!-- Slide 1: Como funciona -->
     <div class="slide" id="slide-1">
       <div class="slide__content">
-        <span class="slide__label">The Problem</span>
-        <h2 class="slide__title">People are<br><em>drowning</em><br>in friction</h2>
-        <p class="slide__description">
-          Existing tools create complexity instead of removing it.
-          Users spend more time managing apps than doing actual work.
-        </p>
-        <div class="slide__stats">
-          <div class="stat">
-            <span class="stat__number">73%</span>
-            <span class="stat__label">feel overwhelmed by tools</span>
-          </div>
-          <div class="stat">
-            <span class="stat__number">2.5h</span>
-            <span class="stat__label">lost per day to app-switching</span>
-          </div>
-        </div>
+        <span class="slide__label">Como funciona</span>
+        <h2 class="slide__title">Veja o bot<br><em>em ação</em></h2>
       </div>
     </div>
 
-    <!-- Slide 2: Solution -->
+    <!-- Slide 2: Etapa 1 (content in global-layer annotation) -->
     <div class="slide" id="slide-2">
-      <div class="slide__content">
-        <span class="slide__label">Our Solution</span>
-        <h2 class="slide__title">One app.<br><em>Everything</em><br>simplified.</h2>
-        <p class="slide__description">
-          We collapse the workflow into a single intelligent interface.
-          Less noise. More flow. Results that speak for themselves.
-        </p>
-        <div class="slide__features">
-          <div class="feature">
-            <div class="feature__icon">⚡</div>
-            <span>10× faster task completion</span>
-          </div>
-          <div class="feature">
-            <div class="feature__icon">🧠</div>
-            <span>AI that learns your patterns</span>
-          </div>
-          <div class="feature">
-            <div class="feature__icon">🔒</div>
-            <span>End-to-end encrypted by default</span>
-          </div>
-        </div>
-      </div>
+      <div class="slide__content"></div>
     </div>
 
     <!-- Slide 3: Traction -->
@@ -119,15 +85,52 @@
       <div class="phone-shell">
         <div class="phone-notch"></div>
         <div class="phone-screen">
-          <div class="phone-app-icon">✦</div>
-          <span class="phone-app-label">Pitch App</span>
-          <div class="phone-screen-dots">
-            <span class="active-dot"></span>
-            <span></span>
-            <span></span>
+          <!-- Layer 1: default content (visible on Slide 0) -->
+          <div class="phone-content-default">
+            <div class="phone-app-icon">✦</div>
+            <span class="phone-app-label">Pitch App</span>
+            <div class="phone-screen-dots">
+              <span class="active-dot"></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          <!-- Layer 2: WhatsApp chat (opacity 0 initially) -->
+          <div class="phone-content-chat" style="opacity: 0;">
+            <div class="chat-header">
+              <div class="chat-header-avatar">P</div>
+              <div class="chat-header-info">
+                <span class="chat-header-name">PitchBot</span>
+                <span class="chat-header-status">online</span>
+              </div>
+            </div>
+            <div class="chat-body">
+              <div class="chat-bubble chat-bubble--user">
+                <p>Vacina causa autismo</p>
+                <span class="chat-bubble-time">10:42</span>
+              </div>
+              <div class="chat-bubble chat-bubble--bot">
+                <p>Estou analisando...</p>
+                <div class="chat-typing-dots"><span></span><span></span><span></span></div>
+                <span class="chat-bubble-time">10:42</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <svg id="arrow-svg" class="arrow-svg" viewBox="0 0 400 80" style="opacity: 0;">
+      <path id="arrow-path" d="M 0,40 C 100,40 200,20 350,40"
+            stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <polygon id="arrow-head" points="345,33 360,40 345,47" fill="rgba(255,255,255,0.5)"/>
+    </svg>
+
+    <div id="arrow-annotation" style="opacity: 0;">
+      <span class="annotation-label">ETAPA 1</span>
+      <h3 class="annotation-title">Recepção</h3>
+      <p class="annotation-desc">A mensagem do usuário é recebida e encaminhada para análise inteligente.</p>
     </div>
   </div>
 

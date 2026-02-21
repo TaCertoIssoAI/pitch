@@ -75,7 +75,7 @@
    SLIDE 1 — PROBLEM
    ============================================= */
 #slide-1 .slide__title em {
-  color: #f87171;
+  color: #34d399;
 }
 
 .slide__stats {
@@ -189,11 +189,6 @@
   border-radius: 30px;
   overflow: hidden;
   background: linear-gradient(160deg, #1e1b4b 0%, #0f172a 50%, #0c1a2e 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
   position: relative;
 }
 

@@ -1,0 +1,202 @@
+/* =============================================
+   PHONE CONTENT LAYERS
+   ============================================= */
+.phone-content-default,
+.phone-content-chat {
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.phone-content-default {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.phone-content-chat {
+  background: #0b141a;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+/* =============================================
+   CHAT HEADER
+   ============================================= */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #1f2c34;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.chat-header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+}
+
+.chat-header-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #e9edef;
+  font-family: 'Inter', sans-serif;
+}
+
+.chat-header-status {
+  font-size: 0.55rem;
+  color: rgba(233, 237, 239, 0.5);
+  font-family: 'Inter', sans-serif;
+}
+
+/* =============================================
+   CHAT BODY & BUBBLES
+   ============================================= */
+.chat-body {
+  flex: 1;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  position: relative;
+  font-family: 'Inter', sans-serif;
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+.chat-bubble p {
+  font-size: 0.6rem;
+  line-height: 1.4;
+  color: #e9edef;
+  margin: 0;
+}
+
+.chat-bubble-time {
+  display: block;
+  font-size: 0.45rem;
+  color: rgba(233, 237, 239, 0.4);
+  text-align: right;
+  margin-top: 2px;
+}
+
+/* User bubble — right-aligned, WhatsApp green */
+.chat-bubble--user {
+  align-self: flex-end;
+  background: #005c4b;
+  border-radius: 8px 2px 8px 8px;
+}
+
+/* Bot bubble — left-aligned */
+.chat-bubble--bot {
+  align-self: flex-start;
+  background: #1f2c34;
+  border-radius: 2px 8px 8px 8px;
+}
+
+/* =============================================
+   TYPING DOTS ANIMATION
+   ============================================= */
+.chat-typing-dots {
+  display: flex;
+  gap: 3px;
+  padding: 4px 0 2px;
+}
+
+.chat-typing-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(233, 237, 239, 0.4);
+  animation: typingBounce 1.4s ease-in-out infinite;
+}
+
+.chat-typing-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.chat-typing-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* =============================================
+   SVG ARROW
+   ============================================= */
+.arrow-svg {
+  position: absolute;
+  width: 300px;
+  height: 60px;
+  left: 42vw;
+  top: 48vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* =============================================
+   ANNOTATION
+   ============================================= */
+#arrow-annotation {
+  position: absolute;
+  left: 58vw;
+  top: 42vh;
+  max-width: 300px;
+  font-family: 'Inter', sans-serif;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.annotation-label {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #34d399;
+  margin-bottom: 0.5rem;
+}
+
+.annotation-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.annotation-desc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.55);
+}
