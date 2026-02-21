@@ -1,16 +1,177 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tá Certo Isso AI? — Pitch</title>
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/transitions.css">
-  <link rel="stylesheet" href="css/phone.css">
-  <link rel="stylesheet" href="css/analysis.css">
+  <title>Pitch — GSAP Slide Presentation</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/slides.css">
 </head>
 <body>
-  <div id="stage"></div>
-  <script type="module" src="js/main.js"></script>
+
+  <!-- =============================================
+       SLIDE CONTAINER
+       ============================================= -->
+  <div id="slide-container">
+
+    <!-- Slide 0: Hero -->
+    <div class="slide" id="slide-0">
+      <div class="slide__content">
+        <span class="slide__label">Introducing</span>
+        <h1 class="slide__title">The app that<br><em>changes everything</em></h1>
+        <p class="slide__description">
+          A seamless, intelligent mobile experience built for the way people actually work.
+          Fast, focused, and designed with purpose.
+        </p>
+        <a href="#" class="slide__cta">
+          Get early access
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Slide 1: Problem -->
+    <div class="slide" id="slide-1">
+      <div class="slide__content">
+        <span class="slide__label">The Problem</span>
+        <h2 class="slide__title">People are<br><em>drowning</em><br>in friction</h2>
+        <p class="slide__description">
+          Existing tools create complexity instead of removing it.
+          Users spend more time managing apps than doing actual work.
+        </p>
+        <div class="slide__stats">
+          <div class="stat">
+            <span class="stat__number">73%</span>
+            <span class="stat__label">feel overwhelmed by tools</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number">2.5h</span>
+            <span class="stat__label">lost per day to app-switching</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Solution -->
+    <div class="slide" id="slide-2">
+      <div class="slide__content">
+        <span class="slide__label">Our Solution</span>
+        <h2 class="slide__title">One app.<br><em>Everything</em><br>simplified.</h2>
+        <p class="slide__description">
+          We collapse the workflow into a single intelligent interface.
+          Less noise. More flow. Results that speak for themselves.
+        </p>
+        <div class="slide__features">
+          <div class="feature">
+            <div class="feature__icon">⚡</div>
+            <span>10× faster task completion</span>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">🧠</div>
+            <span>AI that learns your patterns</span>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">🔒</div>
+            <span>End-to-end encrypted by default</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Traction -->
+    <div class="slide" id="slide-3">
+      <div class="slide__content">
+        <span class="slide__label">Traction</span>
+        <h2 class="slide__title">Growing<br><em>exponentially</em></h2>
+        <p class="slide__description">
+          From zero to thousands of active users in months.
+          Our growth speaks louder than any pitch deck.
+        </p>
+        <div class="slide__stats">
+          <div class="stat">
+            <span class="stat__number">12K+</span>
+            <span class="stat__label">active users</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number">98%</span>
+            <span class="stat__label">retention rate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /#slide-container -->
+
+  <!-- =============================================
+       GLOBAL LAYER — shared elements
+       (Phone mockup lives here, never inside a slide)
+       ============================================= -->
+  <div id="global-layer">
+    <div id="phone-mockup">
+      <div class="phone-shell">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-app-icon">✦</div>
+          <span class="phone-app-label">Pitch App</span>
+          <div class="phone-screen-dots">
+            <span class="active-dot"></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================================
+       NAVIGATION
+       ============================================= -->
+  <nav id="nav">
+    <button class="nav-btn" data-dir="prev" aria-label="Previous slide" disabled>←</button>
+    <div id="dots">
+      <div class="dot active" aria-label="Slide 1"></div>
+      <div class="dot" aria-label="Slide 2"></div>
+      <div class="dot" aria-label="Slide 3"></div>
+      <div class="dot" aria-label="Slide 4"></div>
+    </div>
+    <button class="nav-btn" data-dir="next" aria-label="Next slide">→</button>
+  </nav>
+
+  <div id="key-hint">← → scroll · touch</div>
+
+  <!-- =============================================
+       SCRIPTS — order matters
+       ============================================= -->
+  <!-- GSAP via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+
+  <!-- Engine: shared elements first (no deps) -->
+  <script src="js/engine/shared-elements.js"></script>
+
+  <!-- Slide configs (each self-contained) -->
+  <script src="js/slides/slide-0.js"></script>
+  <script src="js/slides/slide-1.js"></script>
+  <script src="js/slides/slide-2.js"></script>
+  <script src="js/slides/slide-3.js"></script>
+
+  <!-- Registry: after all slide configs -->
+  <script src="js/slides/slide-registry.js"></script>
+
+  <!-- Engine: orchestrator and navigator -->
+  <script src="js/engine/orchestrator.js"></script>
+  <script src="js/engine/navigator.js"></script>
+
+  <!-- Entry point: last -->
+  <script src="js/main.js"></script>
+
 </body>
 </html>

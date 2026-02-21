@@ -1,92 +1,47 @@
 /**
- * main.js — Entry point for the pitch presentation.
- *
- * Loads presentation.json, dynamically instantiates the right Scene
- * class for each entry, registers them in SceneManager, and starts.
+ * main.js — Entry point
+ * Runs after all scripts are loaded.
+ * Order: plugin registration → shared elements → orchestrator → navigator.
  */
-import SceneManager from './SceneManager.js';
-import TitleScene from './scenes/TitleScene.js';
-import WhatsAppScene from './scenes/WhatsAppScene.js';
-import AnalysisScene from './scenes/AnalysisScene.js';
+(function () {
+  'use strict';
 
-/* ---- Scene type registry ---- */
-const SCENE_TYPES = {
-  title: TitleScene,
-  whatsapp: WhatsAppScene,
-  analysis: AnalysisScene,
-};
+  // 1. Register GSAP plugins
+  gsap.registerPlugin(CustomEase);
 
-async function init() {
-  // 1. Load presentation config
-  const res = await fetch('./data/presentation.json');
-  const presentation = await res.json();
+  // 2. Define custom easing curves
+  CustomEase.create('smoothSlide',  'M0,0 C0.25,0.1 0.25,1 1,1');
+  CustomEase.create('snappyBounce', 'M0,0 C0.14,0 0.242,0.438 0.272,0.561 0.313,0.728 0.354,0.963 0.362,1 0.37,0.985 0.414,0.873 0.455,0.811 0.51,0.73 0.659,0.783 0.722,0.812 0.849,0.872 0.964,0.975 1,1');
 
-  // 2. Create scene manager
-  const manager = new SceneManager('#stage');
+  // 3. Wait for DOM
+  document.addEventListener('DOMContentLoaded', function () {
+    // 4. Initialize shared element references
+    window.SharedElements.init();
 
-  // 3. Instantiate & register each scene
-  for (const entry of presentation.scenes) {
-    const SceneClass = SCENE_TYPES[entry.type];
-    if (!SceneClass) {
-      console.warn(`Unknown scene type: "${entry.type}" — skipping "${entry.id}"`);
-      continue;
+    // 5. Build transitions from the registry
+    const transitions = window.Orchestrator.init(window.SlideRegistry);
+
+    // 6. Start navigator (binds all input events)
+    window.Navigator.init(transitions, window.SlideRegistry.length);
+
+    // 7. Entrance animation for slide 0
+    const slide0Content = document.querySelector('#slide-0 .slide__content');
+    if (slide0Content) {
+      gsap.fromTo(slide0Content,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.3 }
+      );
     }
 
-    let config = entry.config || {};
-
-    // If the scene needs external data (e.g., a whatsapp chat), load it
-    if (config.dataFile) {
-      const dataRes = await fetch(config.dataFile);
-      const data = await dataRes.json();
-      config = { ...config, ...data };
+    // 8. Phone entrance animation
+    const phone = window.SharedElements.phone;
+    if (phone) {
+      gsap.fromTo(phone,
+        { scale: 0.7, opacity: 0, rotation: -8 },
+        { scale: 1, opacity: 1, rotation: 0, duration: 1.1, ease: 'power3.out', delay: 0.2 }
+      );
     }
 
-    const scene = new SceneClass(config);
-    manager.register(entry.id, scene);
-  }
-
-  // 4. Load scene order + transitions
-  manager.loadPresentation(presentation);
-
-  // 5. Build slide indicator dots
-  buildIndicator(manager, presentation);
-
-  // 6. Start!
-  await manager.start();
-
-  // 7. Keep indicator in sync
-  document.getElementById('stage').addEventListener('scene-changed', (e) => {
-    updateIndicator(e.detail.index);
+    console.log('[Pitch] Ready. Slides:', window.SlideRegistry.length, '| Transitions:', transitions.length);
   });
-}
-
-/* ---- Slide indicator ---- */
-function buildIndicator(manager, presentation) {
-  const indicator = document.createElement('div');
-  indicator.className = 'slide-indicator';
-  indicator.id = 'slide-indicator';
-
-  presentation.scenes.forEach((s, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.title = s.id;
-    dot.addEventListener('click', () => manager.goTo(s.id));
-    indicator.appendChild(dot);
-  });
-
-  document.body.appendChild(indicator);
-
-  // Navigation hint
-  const hint = document.createElement('div');
-  hint.className = 'nav-hint';
-  hint.textContent = '← → ou clique para navegar';
-  document.body.appendChild(hint);
-}
-
-function updateIndicator(activeIndex) {
-  const dots = document.querySelectorAll('#slide-indicator .dot');
-  dots.forEach((d, i) => d.classList.toggle('active', i === activeIndex));
-}
-
-init();
-
+})();
