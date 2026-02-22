@@ -156,11 +156,12 @@ export function createScene(phoneRefs) {
     "<+0.08"
   );
 
+  // Revert neon text glow back to original color
   tl.to(
-    phoneRefs.botBubble,
+    phoneRefs.botBubble.querySelector(".wa-bubble__text"),
     {
-      borderColor: "rgba(32,198,89,0)",
-      boxShadow: "0 0 0px rgba(32,198,89,0), 0 0 0px rgba(32,198,89,0)",
+      color: "#e9edef",
+      textShadow: "0 0 0px rgba(32,198,89,0)",
       duration: 0.45,
       ease: "power2.out",
     },

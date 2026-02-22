@@ -37,17 +37,18 @@ export function createScene(phoneRefs) {
     ease: "power3.inOut",
   });
 
-  // 2. Neon glow animates in (smooth energy effect via GSAP-driven boxShadow)
+  // 2. Neon text glow on bot message
+  const botText = botBubble.querySelector(".wa-bubble__text");
   tl.fromTo(
-    botBubble,
+    botText,
     {
-      borderColor: "rgba(32,198,89,0)",
-      boxShadow: "0 0 0px rgba(32,198,89,0), 0 0 0px rgba(32,198,89,0)",
+      color: "#e9edef",
+      textShadow: "0 0 0px rgba(32,198,89,0)",
     },
     {
-      borderColor: "rgba(32,198,89,0.55)",
-      boxShadow:
-        "0 0 6px rgba(32,198,89,0.3), 0 0 20px rgba(32,198,89,0.15), 0 0 44px rgba(32,198,89,0.06)",
+      color: "#20c659",
+      textShadow:
+        "0 0 6px rgba(32,198,89,0.5), 0 0 20px rgba(32,198,89,0.25), 0 0 44px rgba(32,198,89,0.1)",
       duration: 0.7,
       ease: "power2.out",
     },

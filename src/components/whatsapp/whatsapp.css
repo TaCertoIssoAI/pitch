@@ -438,36 +438,3 @@
   height: 18px;
 }
 
-/* ── Neon highlight (scene 02) ── */
-.wa-bubble--neon {
-  border-color: rgba(32, 198, 89, 0.55) !important;
-  box-shadow:
-    0 0 6px rgba(32, 198, 89, 0.3),
-    0 0 18px rgba(32, 198, 89, 0.15),
-    0 0 40px rgba(32, 198, 89, 0.06);
-}
-
-.wa-bubble--neon.wa-bubble--bot::after {
-  box-shadow:
-    0 0 0 1px rgba(32, 198, 89, 0.35),
-    0 0 6px rgba(32, 198, 89, 0.25),
-    0 0 16px rgba(32, 198, 89, 0.12);
-  filter: drop-shadow(0 0 3px rgba(32, 198, 89, 0.45));
-}
-
-.wa-bubble--neon.wa-bubble--bot::before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: -9px;
-  width: 10px;
-  height: 15px;
-  background: #202c33;
-  clip-path: polygon(100% 0, 0 0, 100% 100%);
-  border: 1px solid rgba(32, 198, 89, 0.55);
-  box-shadow:
-    0 0 6px rgba(32, 198, 89, 0.25),
-    0 0 16px rgba(32, 198, 89, 0.12);
-  filter: drop-shadow(0 0 3px rgba(32, 198, 89, 0.45));
-  z-index: -1;
-}
