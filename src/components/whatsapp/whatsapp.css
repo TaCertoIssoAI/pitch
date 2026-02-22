@@ -1,3 +1,8 @@
+/* ── Msg sections (for etapa highlights) ── */
+.msg-section {
+  /* GSAP controls color/textShadow — no CSS transitions needed */
+}
+
 .wa-chat {
   display: flex;
   flex-direction: column;

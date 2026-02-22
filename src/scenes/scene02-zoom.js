@@ -7,7 +7,7 @@ export function createScene(phoneRefs) {
   const botBubble = phoneRefs.botBubble;
 
   // Build external panel (Stage right)
-  const panel = el("div", { className: "scene02-panel" }, [
+  const panel = el("div", { className: "stage-panel" }, [
     el("h3", { textContent: "Etapa 1" }),
     el("p", {
       textContent:

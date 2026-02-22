@@ -34,7 +34,7 @@ body {
   overflow: hidden;
 }
 
-.scene02-panel {
+.stage-panel {
   position: absolute;
   top: 50%;
   right: 6vw;
@@ -44,7 +44,7 @@ body {
   opacity: 0;
 }
 
-.scene02-panel h3 {
+.stage-panel h3 {
   color: #20c659;
   font-size: 24px;
   font-weight: 700;
@@ -56,14 +56,14 @@ body {
   margin-bottom: 10px;
 }
 
-.scene02-panel p {
+.stage-panel p {
   color: #e9edef;
   font-size: 16px;
   line-height: 1.6;
 }
 
 @media (max-width: 900px) {
-  .scene02-panel {
+  .stage-panel {
     top: calc(50% + 240px);
     right: auto;
     left: 50%;

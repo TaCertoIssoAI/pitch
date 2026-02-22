@@ -4,6 +4,7 @@ import { createTypingIndicator } from "../components/whatsapp/typingIndicator.js
 import { TIMINGS, EASINGS } from "../utils/constants.js";
 
 const FACT_CHECK_HTML = `
+  <div class="msg-section" id="sec-resumo">
   <p><strong>Resumo Geral:</strong></p>
   <p>Todas as afirmações foram classificadas como Falsas.</p>
   <p>
@@ -18,7 +19,9 @@ const FACT_CHECK_HTML = `
       https://tacertoissoai.com.br/verificacao/VsuVWdNTZW3S
     </a>
   </p>
+  </div>
 
+  <div class="msg-section" id="sec-analise">
   <p><strong>Análise por afirmação:</strong></p>
   <p><strong>Afirmação 1:</strong> A vacina causa autismo</p>
   <p><strong>Veredito:</strong> Falso</p>
@@ -32,7 +35,9 @@ const FACT_CHECK_HTML = `
     específicas relacionadas a vacinas e autismo também foram verificadas como falsas ou fora de contexto
     por agências de checagem, como o Estadão [6][7][8][9].
   </p>
+  </div>
 
+  <div class="msg-section" id="sec-fontes">
   <p><strong>Fontes:</strong></p>
 
   <p><span class="factcheck-source-meta">[1]</span> Algumas vacinas podem causar autismo? - Revista Arco - UFSM</p>
@@ -115,6 +120,7 @@ const FACT_CHECK_HTML = `
       https://www.estadao.com.br/estadao-verifica/falso-aluminio-vacinas-encefalite-autoimune-autismo/
     </a>
   </p>
+  </div>
 `;
 
 export function createScene(phoneRefs) {
@@ -122,6 +128,9 @@ export function createScene(phoneRefs) {
   const secondBotBubble = createBubble("bot", "", { className: "wa-bubble--factcheck" });
   const secondBotText = secondBotBubble.querySelector(".wa-bubble__text");
   const { container: typingEl, startLoop, killLoop } = createTypingIndicator();
+
+  // Inject HTML immediately so section refs are available for later scenes
+  secondBotText.innerHTML = FACT_CHECK_HTML;
 
   phoneRefs.messages.appendChild(typingEl);
   phoneRefs.messages.appendChild(secondBotBubble);
@@ -216,15 +225,14 @@ export function createScene(phoneRefs) {
     "-=0.25"
   );
 
-  tl.call(() => {
-    secondBotText.innerHTML = FACT_CHECK_HTML;
-  }, [], "<");
-
   tl.to({}, { duration: TIMINGS.scenePause });
 
-  // Keep reference in case a future scene needs to swap this placeholder text.
+  // Store references for later scenes
   phoneRefs.secondBotBubble = secondBotBubble;
   phoneRefs.secondBotText = secondBotText;
+  phoneRefs.secResumo = secondBotText.querySelector("#sec-resumo");
+  phoneRefs.secAnalise = secondBotText.querySelector("#sec-analise");
+  phoneRefs.secFontes = secondBotText.querySelector("#sec-fontes");
 
   return tl;
 }
