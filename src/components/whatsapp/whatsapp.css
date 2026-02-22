@@ -370,5 +370,26 @@
 }
 
 .wa-bubble--neon.wa-bubble--bot::after {
-  filter: drop-shadow(0 0 3px rgba(32, 198, 89, 0.4));
+  box-shadow:
+    0 0 0 1px rgba(32, 198, 89, 0.35),
+    0 0 6px rgba(32, 198, 89, 0.25),
+    0 0 16px rgba(32, 198, 89, 0.12);
+  filter: drop-shadow(0 0 3px rgba(32, 198, 89, 0.45));
+}
+
+.wa-bubble--neon.wa-bubble--bot::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -9px;
+  width: 10px;
+  height: 15px;
+  background: #202c33;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+  border: 1px solid rgba(32, 198, 89, 0.55);
+  box-shadow:
+    0 0 6px rgba(32, 198, 89, 0.25),
+    0 0 16px rgba(32, 198, 89, 0.12);
+  filter: drop-shadow(0 0 3px rgba(32, 198, 89, 0.45));
+  z-index: -1;
 }
