@@ -17,6 +17,9 @@ export function createScene(phoneRefs) {
   phoneRefs.stage.appendChild(panel);
   const panelTitle = panel.querySelector("h3");
   const panelText = panel.querySelector("p");
+  phoneRefs.stageOnePanel = panel;
+  phoneRefs.stageOnePanelTitle = panelTitle;
+  phoneRefs.stageOnePanelText = panelText;
 
   // Align transform-origin with the bot message
   const bubbleRect = botBubble.getBoundingClientRect();

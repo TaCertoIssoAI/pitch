@@ -87,7 +87,13 @@ export function createBubble(type, text, opts = {}) {
   }
 
   /* Message text */
-  children.push(el("span", { className: "wa-bubble__text", textContent: text }));
+  const textAttrs = { className: "wa-bubble__text" };
+  if (opts.html) {
+    textAttrs.innerHTML = opts.html;
+  } else {
+    textAttrs.textContent = text;
+  }
+  children.push(el("span", textAttrs));
 
   /* Meta row: time (+ checks for user) */
   const metaKids = [el("span", { className: "wa-bubble__time", textContent: timeStr })];
@@ -96,7 +102,8 @@ export function createBubble(type, text, opts = {}) {
   }
   children.push(el("span", { className: "wa-bubble__meta" }, metaKids));
 
-  const bubble = el("div", { className: `wa-bubble wa-bubble--${type}` }, children);
+  const extraClass = opts.className ? ` ${opts.className}` : "";
+  const bubble = el("div", { className: `wa-bubble wa-bubble--${type}${extraClass}` }, children);
 
   return bubble;
 }

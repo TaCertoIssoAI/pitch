@@ -189,6 +189,47 @@
   clip-path: polygon(100% 0, 0 0, 100% 100%);
 }
 
+/* ── Long fact-check bubble (scene 03) ── */
+.wa-bubble--factcheck .wa-bubble__text {
+  display: block;
+  color: #e9edef;
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.wa-bubble--factcheck .wa-bubble__text p {
+  margin: 0 0 10px;
+}
+
+.wa-bubble--factcheck .wa-bubble__text p:last-child {
+  margin-bottom: 0;
+}
+
+.wa-bubble--factcheck .wa-bubble__text a {
+  color: #53bdeb;
+  text-decoration: none;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.wa-bubble--factcheck .wa-bubble__text a:hover {
+  text-decoration: underline;
+}
+
+.wa-bubble--factcheck .wa-bubble__text .factcheck-source-meta {
+  color: #8696a0;
+}
+
+.wa-bubble--factcheck .wa-bubble__meta {
+  float: none;
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px 0 -2px;
+}
+
 /* ── Reply quote ── */
 .wa-bubble__reply {
   background: rgba(0, 0, 0, 0.25);

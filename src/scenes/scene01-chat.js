@@ -8,6 +8,7 @@ export function createScene(phoneRefs) {
 
   // Build WhatsApp UI inside the phone screen
   const { messages } = createWhatsAppChat(phoneRefs.screen);
+  phoneRefs.messages = messages;
 
   // Create DOM elements (always present, animated via opacity)
   const userMsg = "Vacina causa autismo?";
