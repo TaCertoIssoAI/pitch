@@ -98,12 +98,5 @@ export function createBubble(type, text, opts = {}) {
 
   const bubble = el("div", { className: `wa-bubble wa-bubble--${type}` }, children);
 
-  /* "Etapa" floating label for neon highlight (hidden until scene02) */
-  if (type === "bot") {
-    bubble.appendChild(
-      el("div", { className: "wa-etapa-label", textContent: "Etapa 1" })
-    );
-  }
-
   return bubble;
 }

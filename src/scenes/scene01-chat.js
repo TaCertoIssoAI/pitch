@@ -75,7 +75,7 @@ export function createScene(phoneRefs) {
     botBubble.querySelector(".wa-bubble__text"),
     {
       duration: 0.8,
-      text: "Segundo a OMS, não há evidência científica que relacione vacinas ao autismo. Vou buscar as fontes...",
+      text: "Estou analisando a mensagens para verificar se é fake news. Isso pode levar de 10 segundos a 1 minuto.",
       ease: "none",
     },
     "<"

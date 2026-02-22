@@ -12,7 +12,9 @@ import { scenes } from "./scenes/index.js";
 gsap.registerPlugin(TextPlugin);
 
 // 1. Create the shared phone component
-const phoneRefs = createPhone();
+const app = document.getElementById("app");
+app.classList.add("stage");
+const phoneRefs = createPhone(app);
 
 // 2. Build and register all scenes
 scenes.forEach(({ label, factory }) => {

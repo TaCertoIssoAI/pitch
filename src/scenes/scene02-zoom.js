@@ -1,15 +1,35 @@
 import gsap from "gsap";
-import { TIMINGS, EASINGS } from "../utils/constants.js";
+import { TIMINGS } from "../utils/constants.js";
+import { el } from "../utils/dom.js";
 
 export function createScene(phoneRefs) {
   const tl = gsap.timeline();
   const botBubble = phoneRefs.botBubble;
-  const etapaLabel = botBubble.querySelector(".wa-etapa-label");
 
-  // 1. Phone zooms in and shifts to vertically center the bot message
+  // Build external panel (Stage right)
+  const panel = el("div", { className: "scene02-panel" }, [
+    el("h3", { textContent: "Etapa 1" }),
+    el("p", {
+      textContent:
+        "A mensagem é recebida e encaminhada para o nosso sistema de análise inteligente.",
+    }),
+  ]);
+  phoneRefs.stage.appendChild(panel);
+  const panelTitle = panel.querySelector("h3");
+  const panelText = panel.querySelector("p");
+
+  // Align transform-origin with the bot message
+  const bubbleRect = botBubble.getBoundingClientRect();
+  const phoneRect = phoneRefs.root.getBoundingClientRect();
+  const originX = bubbleRect.left + bubbleRect.width / 2 - phoneRect.left;
+  const originY = bubbleRect.top + bubbleRect.height / 2 - phoneRect.top;
+  gsap.set(phoneRefs.root, { transformOrigin: `${originX}px ${originY}px` });
+  gsap.set(panel, { opacity: 1, x: 0 });
+
+  // 1. Phone zooms in and shifts left for split screen
   tl.to(phoneRefs.root, {
-    scale: 1.3,
-    y: -60,
+    scale: 1.45,
+    x: "-30vw",
     duration: TIMINGS.phoneMove,
     ease: "power3.inOut",
   });
@@ -18,25 +38,30 @@ export function createScene(phoneRefs) {
   tl.fromTo(
     botBubble,
     {
-      borderColor: "rgba(0,255,0,0)",
-      boxShadow: "0 0 0px rgba(0,255,0,0), 0 0 0px rgba(0,255,0,0)",
+      borderColor: "rgba(32,198,89,0)",
+      boxShadow: "0 0 0px rgba(32,198,89,0), 0 0 0px rgba(32,198,89,0)",
     },
     {
-      borderColor: "rgba(0,255,0,0.55)",
+      borderColor: "rgba(32,198,89,0.55)",
       boxShadow:
-        "0 0 6px rgba(0,255,0,0.3), 0 0 20px rgba(0,255,0,0.15), 0 0 44px rgba(0,255,0,0.06)",
+        "0 0 6px rgba(32,198,89,0.3), 0 0 20px rgba(32,198,89,0.15), 0 0 44px rgba(32,198,89,0.06)",
       duration: 0.7,
       ease: "power2.out",
     },
     "-=0.3"
   );
 
-  // 3. "ETAPA 1" label rises in from below
-  tl.fromTo(
-    etapaLabel,
-    { opacity: 0, y: 8 },
-    { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
-    "-=0.35"
+  // 3. External panel slides in with stagger
+  tl.from(
+    [panelTitle, panelText],
+    {
+      opacity: 0,
+      x: 50,
+      duration: 0.6,
+      stagger: 0.12,
+      ease: "power2.out",
+    },
+    "<"
   );
 
   // Hold

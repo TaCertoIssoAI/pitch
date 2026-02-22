@@ -12,7 +12,7 @@
   --safe-top: 28px;     /* notch height + breathing room */
   --safe-bottom: 26px;  /* home-bar + border-radius curve clearance */
 
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

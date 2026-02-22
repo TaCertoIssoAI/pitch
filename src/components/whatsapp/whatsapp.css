@@ -362,31 +362,13 @@
 
 /* ── Neon highlight (scene 02) ── */
 .wa-bubble--neon {
-  border-color: rgba(0, 255, 0, 0.55) !important;
+  border-color: rgba(32, 198, 89, 0.55) !important;
   box-shadow:
-    0 0 6px rgba(0, 255, 0, 0.3),
-    0 0 18px rgba(0, 255, 0, 0.15),
-    0 0 40px rgba(0, 255, 0, 0.06);
+    0 0 6px rgba(32, 198, 89, 0.3),
+    0 0 18px rgba(32, 198, 89, 0.15),
+    0 0 40px rgba(32, 198, 89, 0.06);
 }
 
 .wa-bubble--neon.wa-bubble--bot::after {
-  filter: drop-shadow(0 0 3px rgba(0, 255, 0, 0.4));
-}
-
-/* ── Etapa floating label ── */
-.wa-etapa-label {
-  position: absolute;
-  top: -32px;
-  left: 0;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #00ff00;
-  text-shadow:
-    0 0 6px rgba(0, 255, 0, 0.5),
-    0 0 14px rgba(0, 255, 0, 0.2);
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
+  filter: drop-shadow(0 0 3px rgba(32, 198, 89, 0.4));
 }
