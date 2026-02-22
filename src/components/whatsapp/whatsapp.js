@@ -46,6 +46,19 @@ export function createWhatsAppChat(screen) {
 
   /* ── Messages ── */
   const messages = el("div", { className: "wa-messages" });
+  let scrollEndTimer = null;
+
+  const handleScrollActivity = () => {
+    messages.classList.add("is-scrolling");
+    if (scrollEndTimer) {
+      clearTimeout(scrollEndTimer);
+    }
+    scrollEndTimer = setTimeout(() => {
+      messages.classList.remove("is-scrolling");
+    }, 900);
+  };
+
+  messages.addEventListener("scroll", handleScrollActivity, { passive: true });
 
   /* ── Input bar (WA-accurate layout) ── */
   const fieldWrap = el("div", { className: "wa-input-bar__field-wrap" }, [
