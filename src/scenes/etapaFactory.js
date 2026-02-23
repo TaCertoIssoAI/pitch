@@ -47,16 +47,19 @@ export function createEtapaScene(phoneRefs, opts) {
     }, opts.movePhone ? "<" : "+=0");
   }
 
-  // ── 3. Auto-scroll: align title near top of visible area ──
-  const messagesEl = phoneRefs.messages;
-  const SCROLL_OFFSET_Y = 30; // px breathing room from top
-  tl.to(messagesEl, {
-    scrollTo: {
-      y: opts.sectionTitle,
-      offsetY: SCROLL_OFFSET_Y,
-    },
+  // ── 3. Auto-scroll: pin title at TOP of visible chat area ──
+  tl.to(phoneRefs.messages, {
     duration: 0.8,
-    ease: "power2.inOut",
+    onStart: () => {
+      opts.sectionTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    },
+    onReverseComplete: () => {
+      if (opts.prevSectionTitle) {
+        opts.prevSectionTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        phoneRefs.messages.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    },
   }, opts.prevSectionTitle ? "<+0.1" : (opts.movePhone ? "<+0.3" : "+=0"));
 
   // ── 4. Neon highlight on title only ──
