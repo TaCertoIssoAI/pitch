@@ -19,7 +19,8 @@ export function createScene(phoneRefs) {
   const { tl: etapaTl, panel, panelTitle, panelText } = createEtapaScene(phoneRefs, {
     movePhone: false,
     section: phoneRefs.secAnalise,
-    prevSection: phoneRefs.secResumo,
+    sectionTitle: phoneRefs.secAnaliseTitle,
+    prevSectionTitle: phoneRefs.secResumoTitle,
     title: "Etapa 3: Análise Detalhada",
     text: "Cada afirmação contida na mensagem original é destrinchada e verificada individualmente contra a desinformação.",
   });

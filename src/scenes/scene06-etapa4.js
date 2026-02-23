@@ -19,7 +19,8 @@ export function createScene(phoneRefs) {
   const { tl: etapaTl, panel, panelTitle, panelText } = createEtapaScene(phoneRefs, {
     movePhone: false,
     section: phoneRefs.secFontes,
-    prevSection: phoneRefs.secAnalise,
+    sectionTitle: phoneRefs.secFontesTitle,
+    prevSectionTitle: phoneRefs.secAnaliseTitle,
     title: "Etapa 4: Transparência",
     text: "As evidências são apresentadas com links diretos para fontes oficiais, governamentais e científicas.",
   });

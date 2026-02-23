@@ -11,7 +11,8 @@ export function createScene(phoneRefs) {
   const { tl: etapaTl, panel, panelTitle, panelText } = createEtapaScene(phoneRefs, {
     movePhone: true,
     section: phoneRefs.secResumo,
-    prevSection: null,
+    sectionTitle: phoneRefs.secResumoTitle,
+    prevSectionTitle: null,
     title: "Etapa 2: Resumo e Veredito",
     text: "A IA consolida os dados das checagens e gera um veredito claro e direto para o usuário.",
   });

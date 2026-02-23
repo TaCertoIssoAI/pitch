@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { TextPlugin } from "gsap/TextPlugin";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import "./style.css";
 
 import { createPhone } from "./components/phone/phone.js";
@@ -9,7 +10,7 @@ import { createNav } from "./components/nav/nav.js";
 import { scenes } from "./scenes/index.js";
 
 // Register GSAP plugins
-gsap.registerPlugin(TextPlugin);
+gsap.registerPlugin(TextPlugin, ScrollToPlugin);
 
 // 1. Create the shared phone component
 const app = document.getElementById("app");

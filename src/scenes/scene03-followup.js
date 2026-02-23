@@ -5,7 +5,7 @@ import { TIMINGS, EASINGS } from "../utils/constants.js";
 
 const FACT_CHECK_HTML = `
   <div class="msg-section" id="sec-resumo">
-  <p><strong>Resumo Geral:</strong></p>
+  <p class="msg-section-title"><strong>Resumo Geral:</strong></p>
   <p>Todas as afirmações foram classificadas como Falsas.</p>
   <p>
     A alegação de que vacinas causam autismo é categoricamente falsa. Diversas fontes confiáveis,
@@ -22,7 +22,7 @@ const FACT_CHECK_HTML = `
   </div>
 
   <div class="msg-section" id="sec-analise">
-  <p><strong>Análise por afirmação:</strong></p>
+  <p class="msg-section-title"><strong>Análise por afirmação:</strong></p>
   <p><strong>Afirmação 1:</strong> A vacina causa autismo</p>
   <p><strong>Veredito:</strong> Falso</p>
   <p>
@@ -38,7 +38,7 @@ const FACT_CHECK_HTML = `
   </div>
 
   <div class="msg-section" id="sec-fontes">
-  <p><strong>Fontes:</strong></p>
+  <p class="msg-section-title"><strong>Fontes:</strong></p>
 
   <p><span class="factcheck-source-meta">[1]</span> Algumas vacinas podem causar autismo? - Revista Arco - UFSM</p>
   <p><span class="factcheck-source-meta">Fonte:</span> <span class="factcheck-source-meta">www.ufsm.br</span></p>
@@ -233,6 +233,9 @@ export function createScene(phoneRefs) {
   phoneRefs.secResumo = secondBotText.querySelector("#sec-resumo");
   phoneRefs.secAnalise = secondBotText.querySelector("#sec-analise");
   phoneRefs.secFontes = secondBotText.querySelector("#sec-fontes");
+  phoneRefs.secResumoTitle = phoneRefs.secResumo.querySelector(".msg-section-title");
+  phoneRefs.secAnaliseTitle = phoneRefs.secAnalise.querySelector(".msg-section-title");
+  phoneRefs.secFontesTitle = phoneRefs.secFontes.querySelector(".msg-section-title");
 
   return tl;
 }

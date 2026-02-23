@@ -8,8 +8,9 @@ import { TIMINGS } from "../utils/constants.js";
  * @param {object}  phoneRefs       – shared refs from the phone component
  * @param {object}  opts
  * @param {boolean} opts.movePhone  – true if phone needs to travel from 20vw → -25vw
- * @param {Element} opts.section    – the .msg-section to scroll to & highlight
- * @param {Element|null} opts.prevSection – previous section to un-highlight (null on first)
+ * @param {Element} opts.section    – the .msg-section container
+ * @param {Element} opts.sectionTitle – the .msg-section-title to scroll to & highlight
+ * @param {Element|null} opts.prevSectionTitle – previous title to un-highlight (null on first)
  * @param {string}  opts.title      – panel heading
  * @param {string}  opts.text       – panel body
  */
@@ -36,9 +37,9 @@ export function createEtapaScene(phoneRefs, opts) {
     });
   }
 
-  // ── 2. Reset neon on previous section ──
-  if (opts.prevSection) {
-    tl.to(opts.prevSection, {
+  // ── 2. Reset neon on previous title ──
+  if (opts.prevSectionTitle) {
+    tl.to(opts.prevSectionTitle, {
       color: "#e9edef",
       textShadow: "0 0 0px rgba(32,198,89,0)",
       duration: 0.4,
@@ -46,17 +47,21 @@ export function createEtapaScene(phoneRefs, opts) {
     }, opts.movePhone ? "<" : "+=0");
   }
 
-  // ── 3. Auto-scroll to current section ──
+  // ── 3. Auto-scroll: align title near top of visible area ──
   const messagesEl = phoneRefs.messages;
+  const SCROLL_OFFSET_Y = 30; // px breathing room from top
   tl.to(messagesEl, {
-    scrollTop: () => opts.section.offsetTop - 20,
+    scrollTo: {
+      y: opts.sectionTitle,
+      offsetY: SCROLL_OFFSET_Y,
+    },
     duration: 0.8,
     ease: "power2.inOut",
-  }, opts.prevSection ? "<+0.1" : (opts.movePhone ? "<+0.3" : "+=0"));
+  }, opts.prevSectionTitle ? "<+0.1" : (opts.movePhone ? "<+0.3" : "+=0"));
 
-  // ── 4. Neon highlight on current section ──
+  // ── 4. Neon highlight on title only ──
   tl.fromTo(
-    opts.section,
+    opts.sectionTitle,
     {
       color: "#e9edef",
       textShadow: "0 0 0px rgba(32,198,89,0)",
